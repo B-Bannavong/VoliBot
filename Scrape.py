@@ -52,12 +52,16 @@ class scraper:
 
             if url != 'https://oauth.reddit.com/r/investing/hot':
                 df_result = self.df[self.df['Flair'].isin(options)]
-
-
-
-
-            df_result['Tickers'] = df_result['Title'].apply(self.get_tckr)
-            print(df_result)
+                df_result['Tickers'] = df_result['Title'].apply(self.get_tckr)
+                print(df_result)
+                df_result = df_result.empty
+            else:
+                self.df['Tickers'] = self.df['Title'].apply(self.get_tckr)
+                print(self.df)
+                self.df = self.df.empty
+           
+            
+            
 
     def get_tckr(self,text):
         doc = self.nlp(text)
