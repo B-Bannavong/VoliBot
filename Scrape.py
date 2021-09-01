@@ -4,6 +4,7 @@ from requests.auth import HTTPBasicAuth
 import spacy
 from spacy import displacy
 import pandas as pd
+import os
 #with open('pw.txt', 'r') as f:
 #    pw = f.read()
 
@@ -12,6 +13,7 @@ data = {
     'username': 'Eccccca',
     'password': 'brandonb10'
 }
+CWD = os.getcwd()
 subs = ['https://oauth.reddit.com/r/wallstreetbets/hot', 'https://oauth.reddit.com/r/smallstreetbets/hot', 'https://oauth.reddit.com/r/investing/hot']
 headers = {'User-Agent' : 'MyAPI/0.0.1'}
 BLACKLIST = ['otm', 'itm', 'yolo', 'ath']
@@ -28,6 +30,8 @@ class scraper:
         headers['Authorization'] = f'bearer {self.TOKEN}'
         self.df = pd.DataFrame()
         self.nlp = spacy.load('en_core_web_sm')
+        self.count = 0
+        self.ticker_type = 'ORG'
         
         return super().__init__(*args, **kwargs)
 
@@ -53,23 +57,26 @@ class scraper:
             if url != 'https://oauth.reddit.com/r/investing/hot':
                 df_result = self.df[self.df['Flair'].isin(options)]
                 df_result['Tickers'] = df_result['Title'].apply(self.get_tckr)
+                self.data_to_html(df_result)
                 print(df_result)
                
             else:
                 self.df['Tickers'] = self.df['Title'].apply(self.get_tckr)
+                self.data_to_html(self.df)
                 print(self.df)
                 
             df_result = df_result[0:0]
             self.df = self.df[0:0]
-            
+     
+    def data_to_html(self,result):
+        result.to_html(CWD + f'\Reddit Data\scraped{self.count}.html')
+        self.count = self.count + 1
+        
 
     def get_tckr(self,text):
         doc = self.nlp(text)
         #displacy.render(doc, style='ent')
-        tckr_list = []
-        for entity in doc.ents:
-            if entity.label_ == 'ORG' and entity.text.lower() not in BLACKLIST:
-                tckr_list.append(entity.text)
+        tckr_list = [entity.text for entity in doc.ents if entity.label_ == self.ticker_type and entity.text.lower() not in BLACKLIST]
         return (tckr_list)
 
 
