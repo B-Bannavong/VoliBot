@@ -54,13 +54,13 @@ class scraper:
                 df_result = self.df[self.df['Flair'].isin(options)]
                 df_result['Tickers'] = df_result['Title'].apply(self.get_tckr)
                 print(df_result)
-                df_result = df_result.empty
+               
             else:
                 self.df['Tickers'] = self.df['Title'].apply(self.get_tckr)
                 print(self.df)
-                self.df = self.df.empty
-           
-            
+                
+            df_result = df_result[0:0]
+            self.df = self.df[0:0]
             
 
     def get_tckr(self,text):
