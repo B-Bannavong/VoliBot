@@ -14,12 +14,13 @@ data = {
     'password': 'brandonb10'
 }
 CWD = os.getcwd()
-subs = ['https://oauth.reddit.com/r/wallstreetbets/hot', 'https://oauth.reddit.com/r/smallstreetbets/hot', 'https://oauth.reddit.com/r/investing/hot']
+subs = ['https://oauth.reddit.com/r/wallstreetbets/hot', 'https://oauth.reddit.com/r/smallstreetbets/hot', 'https://oauth.reddit.com/r/investing/hot','https://oauth.reddit.com/r/stocks/hot' ]
+subNames = ['WallstreetBets', 'SmallstreetBets', 'Investing', 'Stocks']
 headers = {'User-Agent' : 'MyAPI/0.0.1'}
 BLACKLIST = ['otm', 'itm', 'yolo', 'ath']
 CLIENT_ID = 'kOUB-9yoTlH7vNtmDDcMPw'
 SECRET_KEY = 'fG_oxXT93FZLxMVmN-Bpmpq8j30yyQ'
-options = ['DD', 'YOLO', 'Gain', 'Technical Analysis', 'Discussion', 'News', 'YOLOOO', 'Epic DD Analysis']
+options = ['DD', 'YOLO', 'Gain', 'Technical Analysis', 'Discussion', 'News', 'YOLOOO', 'Epic DD Analysis', 'Company News', 'Industry Discussion', 'Company Discussion', 'Trades', 'Company Question']
 
 class scraper:
     
@@ -69,13 +70,13 @@ class scraper:
             self.df = self.df[0:0]
      
     def data_to_html(self,result):
-        result.to_html(CWD + f'\Reddit Data\scraped{self.count}.html')
+        result.to_html(CWD + f'\Reddit Data\Scraped-{subNames[self.count]}.html')
         self.count = self.count + 1
         
 
     def get_tckr(self,text):
         doc = self.nlp(text)
-        #displacy.render(doc, style='ent')
+        displacy.render(doc, style='ent')
         tckr_list = [entity.text for entity in doc.ents if entity.label_ == self.ticker_type and entity.text.lower() not in BLACKLIST]
         return (tckr_list)
 
