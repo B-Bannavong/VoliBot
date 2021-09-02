@@ -41,7 +41,7 @@ class scraper:
             res = requests.get(url,
             headers=headers, params={'limit' : '50'}) #We can add 'after' : [id]' to get all posts after the specified ID
 
-
+#hi
             for post in res.json()['data']['children']:
                 self.df = self.df.append({
                     'Subreddit' : post['data']['subreddit'],
