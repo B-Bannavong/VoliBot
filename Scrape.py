@@ -4,23 +4,9 @@ from requests.auth import HTTPBasicAuth
 import spacy
 from spacy import displacy
 import pandas as pd
-import os
-#with open('pw.txt', 'r') as f:
-#    pw = f.read()
+from globals import *
 
-data = {
-    'grant_type': 'password',
-    'username': 'Eccccca',
-    'password': 'brandonb10'
-}
-CWD = os.getcwd()
-subs = ['https://oauth.reddit.com/r/wallstreetbets/hot', 'https://oauth.reddit.com/r/smallstreetbets/hot', 'https://oauth.reddit.com/r/investing/hot','https://oauth.reddit.com/r/stocks/hot' ]
-subNames = ['WallstreetBets', 'SmallstreetBets', 'Investing', 'Stocks']
-headers = {'User-Agent' : 'MyAPI/0.0.1'}
-BLACKLIST = ['otm', 'itm', 'yolo', 'ath']
-CLIENT_ID = 'kOUB-9yoTlH7vNtmDDcMPw'
-SECRET_KEY = 'fG_oxXT93FZLxMVmN-Bpmpq8j30yyQ'
-options = ['DD', 'YOLO', 'Gain', 'Technical Analysis', 'Discussion', 'News', 'YOLOOO', 'Epic DD Analysis', 'Company News', 'Industry Discussion', 'Company Discussion', 'Trades', 'Company Question']
+
 
 class scraper:
     
@@ -41,7 +27,6 @@ class scraper:
             res = requests.get(url,
             headers=headers, params={'limit' : '50'}) #We can add 'after' : [id]' to get all posts after the specified ID
 
-#hi
             for post in res.json()['data']['children']:
                 self.df = self.df.append({
                     'Subreddit' : post['data']['subreddit'],
@@ -85,8 +70,5 @@ if __name__ == "__main__":
     scrape = scraper()
     scrape.run(subs)
 
-
-#print(post['data'].keys()) #(call this for list of possible keys)
-# print(displacy.render(doc, style='ent'))
 
 
